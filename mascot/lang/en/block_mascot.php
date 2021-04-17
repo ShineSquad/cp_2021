@@ -16,18 +16,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_newblock', language 'en'
+ * Strings for component 'block_mascot', language 'en'
  *
- * @package   block_newblock
- * @copyright Daniel Neis <danielneis@gmail.com>
+ * @package   block_mascot
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['blockstring'] = 'Block string';
-$string['descconfig'] = 'Description of the config section';
-$string['descfoo'] = 'Config description';
-$string['headerconfig'] = 'Config section header';
-$string['labelfoo'] = 'Config label';
-$string['newblock:addinstance'] = 'Add a newblock block';
-$string['newblock:myaddinstance'] = 'Add a newblock block to my moodle';
-$string['pluginname'] = 'Newblock';
+// $string['blockstring'] = 'Block string';
+// $string['descconfig'] = 'Description of the config section';
+// $string['descfoo'] = 'Config description';
+// $string['headerconfig'] = 'Config section header';
+// $string['labelfoo'] = 'Config label';
+// $string['newblock:addinstance'] = 'Add a newblock block';
+// $string['newblock:myaddinstance'] = 'Add a newblock block to my moodle';
+$string['pluginname'] = 'Mascot';
+$string['mascot'] = 'Simple HTML!!!!';
+$string['mascot:addinstance'] = 'Add a new simple mascot block';
+$string['mascot:myaddinstance'] = 'Add a new simple mascot block to the My Moodle page';
