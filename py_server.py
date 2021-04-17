@@ -14,7 +14,7 @@ mysql.init_app(app)
 
 @app.route("/")
 def index():
-	return "42"
+	return "userinfo"
 
 @app.route("/userinfo/<id>")
 def userinfo(id):
