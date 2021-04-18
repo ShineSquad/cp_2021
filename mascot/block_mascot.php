@@ -125,7 +125,6 @@ class block_mascot extends block_base {
     function init() {
         // $this->title = get_string('title', 'block_mascot');
         $this->title = "Талисман";
-        // $DB->set_field($table, $newfield, $newvalue, array $conditions=null)
     }
 
     function get_content() {
@@ -137,16 +136,15 @@ class block_mascot extends block_base {
 
         $this->content = new stdClass;
 
-        $this->setGames(50);
-
         $stats = $DB->get_record("mascot", ["user_id" => $USER->id]);
 
         $foods = $stats->foods;
         $games = $stats->games;
+        $uid = $USER->id;
 
-        $this->content->text .= "
+        $this->content->text = "
             <div id='mas-container'>
-                <div id='mascot'>
+                <div id='mascot' uid='$uid'>
                     <div id='mas-popup' style='display: none; opacity: 0;' type='others'></div>
                     <img src='https://shsq.ru/moodle/user-images/pers1.png'>
                     <div id='mas-controls'>
@@ -166,21 +164,21 @@ class block_mascot extends block_base {
         return $this->content;
     }
 
-    function setFoods($inc) {
-        global $USER, $DB;
+    // function setFoods($inc) {
+    //     global $USER, $DB;
 
-        $stats = $DB->get_record("mascot", ["user_id" => $USER->id]);
-        $foods = $stats->foods;
-        $DB->set_field("mascot", "foods", $foods+$inc, ["user_id" => $USER->id]);
-    }
+    //     $stats = $DB->get_record("mascot", ["user_id" => $USER->id]);
+    //     $foods = $stats->foods;
+    //     $DB->set_field("mascot", "foods", $foods+$inc, ["user_id" => $USER->id]);
+    // }
 
-    function setGames($inc) {
-        global $USER, $DB;
+    // function setGames($inc) {
+    //     global $USER, $DB;
 
-        $stats = $DB->get_record("mascot", ["user_id" => $USER->id]);
-        $games = $stats->games;
-        $DB->set_field("mascot", "games", $games+$inc, ["user_id" => $USER->id]);
-    }
+    //     $stats = $DB->get_record("mascot", ["user_id" => $USER->id]);
+    //     $games = $stats->games;
+    //     $DB->set_field("mascot", "games", $games+$inc, ["user_id" => $USER->id]);
+    // }
 }
 ?>
 <script type="text/javascript">
@@ -208,6 +206,7 @@ class block_mascot extends block_base {
         "@!#?@!",
         "F"
     ];
+    var UID = null;
 
     function _feed() {
         // TODO:
@@ -225,7 +224,11 @@ class block_mascot extends block_base {
             hidePP();
         }
 
-        node.setAttribute("count", (count-1 <= 0) ? 0 : count-1);
+        fetch("https://shsq.ru/mascot-rest/set_food.php?id="+UID+"&inc=-1")
+            .then(resp => resp.text())
+            .then(text => {
+                node.setAttribute("count", text);
+            })
     }
     function _play() {
         // TODO:
@@ -243,7 +246,11 @@ class block_mascot extends block_base {
             hidePP();
         }
 
-        node.setAttribute("count", (count-1 <= 0) ? 0 : count-1);
+        fetch("https://shsq.ru/mascot-rest/set_game.php?id="+UID+"&inc=-1")
+            .then(resp => resp.text())
+            .then(text => {
+                node.setAttribute("count", text);
+            })
     }
 
     function sadPP() {
@@ -319,5 +326,7 @@ class block_mascot extends block_base {
     window.addEventListener("load", (ev)=>{
         bindActions();
         newMsg(); // DEL
+
+        UID = document.querySelector("#mascot").getAttribute("uid");
     })
 </script>
