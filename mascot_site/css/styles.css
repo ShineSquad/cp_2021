@@ -242,7 +242,7 @@ main {
         main .container .right .avatar-container #avatar {
           height: 65%;
           position: absolute;
-          left: -150px;
+          left: -250px;
           z-index: -1; }
       main .container .right .information {
         width: 100%;

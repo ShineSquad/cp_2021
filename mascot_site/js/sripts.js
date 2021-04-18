@@ -6,7 +6,11 @@ $(function() {
 			children = $(node).children()[0];
 		$(children).text(count);
 	}
-	let response = fetch()
+
+	change_balance();
+	change_avatar();
+	satiety();
+
 	$('.drag_elem').draggable({
 		helper: "clone"
 	});
@@ -17,6 +21,50 @@ $(function() {
         }
 	});
 });
+
+function satiety() {
+	let val = document.querySelector('#progress-satiety .value');
+		val.style.width = '100%';
+}
+
+function change_avatar() {
+	let avatar = document.getElementById('avatar'),
+		active = localStorage.getItem('active_avatar');
+	if (!active) {
+		avatar.setAttribute('src', './assets/pers2chisty.png');
+	} else {
+		avatar.setAttribute('src', active);
+	}
+}
+
+function change_balance() {
+	fetch("https://shsq.ru/mascot-rest/get_userinfo.php?id=2")
+		.then(resp => resp.text())
+		.then(text => {
+			localStorage.setItem('balance', JSON.parse(text).balance);
+		});
+	let balance_array = ['main-balance', 'clothes-balance', 'food-balance'],
+		count = localStorage.getItem('balance');
+	for (i in balance_array) {
+		document.getElementById(balance_array[i]).innerText = count + ' монет';
+	}
+}
+
+function buy( _type, _name, _value ) {
+	count = localStorage.getItem('balance');
+	if (count < _value) {
+		alert('Недостаточно баллов!');
+	} else {
+		if (_type == 'clothes') {
+			fetch('https://shsq.ru/mascot-rest/set_balance.php?id=2&inc=-'+ _value);
+			change_balance();
+			localStorage.setItem('active_avatar', './assets/' + _name);
+			change_avatar();
+			modal_food(' ' ,'none');
+			modal_view(' ' ,'none');
+		}
+	}
+}
 
 function modal_view( _item, _state ) {
 	var items = ['clothing-modal', 'food-modal', 'artifacts-modal'];

@@ -36,9 +36,9 @@
 					</div>
 					<div class="coins">
 						<img src="assets/coins.svg" class="icon" width="87" height="53">
-						<p class="value">1087 монет</p>
+						<p class="value" id="main-balance">1087 монет</p>
 					</div>
-					<a href="#" class="button">Пройти испытания</a>
+					<a href="https://shsq.ru/moodle" class="button" target="_blank">Пройти испытания</a>
 					<div class="bottom-container">
 						<div class="shops-link">
 							<p class="title">Магазины</p>
@@ -94,7 +94,7 @@
 				</div>
 				<div class="right">
 					<div class="avatar-container">
-						<img src="assets/gri.png" id="avatar">
+						<img src="assets/pers2chisty.png" id="avatar">
 					</div>
 					<div class="information">
 						<div class="naming">
@@ -105,7 +105,7 @@
 							<div class="item">
 								<div class="text">
 									<p>уровень сытости:</p>
-									<p>24%</p>
+									<p class="satiety-persent">24%</p>
 								</div>
 								<div class="progress-bar" id="progress-satiety">
 									<div class="value"></div>
@@ -143,7 +143,7 @@
 							<img src="assets/coins.svg">
 							<div class="data">
 								<p class="text">У вас:</p>
-								<p class="count">1087 монет</p>
+								<p class="count" id="clothes-balance">1087 монет</p>
 							</div>
 						</div>
 					</div>
@@ -160,7 +160,7 @@
 					    			<p class="count">560</p>
 					    		</div>
 					    	</div>
-					    	<a href="#" class="button">Купить</a>
+					    	<a href="#" class="button" onclick="buy('clothes', 'pers2.png', 560)">Купить</a>
 					    </div>
 					    <div class="item">
 					    	<img src="assets/pers2stimpank.png" class="skin">
@@ -169,12 +169,12 @@
 					    			<p class="complect">комплект</p>
 					    			<p class="name">Стимпанк</p>
 					    		</div>
-					    		<div class="price disable_price">
+					    		<div class="price">
 					    			<img src="assets/noun_coins.svg" width="31" height="31" class="icon">
 					    			<p class="count">1100</p>
 					    		</div>
 					    	</div>
-					    	<a href="#" class="button disable_button">Купить</a>
+					    	<a href="#" class="button" onclick="buy('clothes', 'pers2stimpank.png', 1100)">Купить</a>
 					    </div>
 					    <div class="item">
 					    	<div class="security">?</div>
@@ -188,7 +188,7 @@
 					    			<p class="count">xxx</p>
 					    		</div>
 					    	</div>
-					    	<a href="#" class="button disable_button">Купить</a>
+					    	<a href="#" class="button disable_button" onclick="buy('clothes', 'secret', 10000)">Купить</a>
 					    </div>
 					    <div class="item">
 					    	<img src="assets/pers2.png" class="skin">
@@ -202,7 +202,7 @@
 					    			<p class="count">560</p>
 					    		</div>
 					    	</div>
-					    	<a href="#" class="button">Купить</a>
+					    	<a href="#" class="button" onclick="buy('clothes', 'pers2.png', 560)">Купить</a>
 					    </div>
 					    <div class="item">
 					    	<img src="assets/pers2stimpank.png" class="skin">
@@ -211,12 +211,12 @@
 					    			<p class="complect">комплект</p>
 					    			<p class="name">Стимпанк</p>
 					    		</div>
-					    		<div class="price disable_price">
+					    		<div class="price">
 					    			<img src="assets/noun_coins.svg" width="31" height="31" class="icon">
 					    			<p class="count">1100</p>
 					    		</div>
 					    	</div>
-					    	<a href="#" class="button disable_button">Купить</a>
+					    	<a href="#" class="button" onclick="buy('clothes', 'pers2stimpank.png', 1100)">Купить</a>
 					    </div>
 					    <div class="item">
 					    	<div class="security">?</div>
@@ -230,7 +230,7 @@
 					    			<p class="count">xxx</p>
 					    		</div>
 					    	</div>
-					    	<a href="#" class="button disable_button">Купить</a>
+					    	<a href="#" class="button disable_button" onclick="buy('clothes', 'secret', 10000)">Купить</a>
 					    </div>
 					</div>
 				</div>
@@ -250,7 +250,7 @@
 							<img src="assets/coins.svg">
 							<div class="data">
 								<p class="text">У вас:</p>
-								<p class="count">1087 монет</p>
+								<p class="count" id="food-balance">1087 монет</p>
 							</div>
 						</div>
 					</div>
