@@ -125,6 +125,7 @@ class block_mascot extends block_base {
     function init() {
         // $this->title = get_string('title', 'block_mascot');
         $this->title = "Талисман";
+        // $DB->set_field($table, $newfield, $newvalue, array $conditions=null)
     }
 
     function get_content() {
@@ -136,12 +137,12 @@ class block_mascot extends block_base {
 
         $this->content = new stdClass;
 
+        $this->setGames(50);
+
         $stats = $DB->get_record("mascot", ["user_id" => $USER->id]);
 
         $foods = $stats->foods;
         $games = $stats->games;
-
-        $DB->update_record("mascot", $dataobject, $bulk=false);
 
         $this->content->text .= "
             <div id='mas-container'>
@@ -152,7 +153,7 @@ class block_mascot extends block_base {
                         <div class='btn foods bages' count='$foods'>Покормить</div>
                         <div class='btn games bages' count='$games'>Поиграть</div>
                         <div class='btn home'>
-                            <a href='https://www.figma.com/proto/8QswJOUiCH6rmm0LzEIwYn/Untitled?node-id=41%3A2&scaling=min-zoom&page-id=0%3A1'
+                            <a href='https://shinesquad.ru/projects/mascot/'
                                target='_blank' >
                                 В комнату
                             </a>
@@ -163,6 +164,22 @@ class block_mascot extends block_base {
         ";
 
         return $this->content;
+    }
+
+    function setFoods($inc) {
+        global $USER, $DB;
+
+        $stats = $DB->get_record("mascot", ["user_id" => $USER->id]);
+        $foods = $stats->foods;
+        $DB->set_field("mascot", "foods", $foods+$inc, ["user_id" => $USER->id]);
+    }
+
+    function setGames($inc) {
+        global $USER, $DB;
+
+        $stats = $DB->get_record("mascot", ["user_id" => $USER->id]);
+        $games = $stats->games;
+        $DB->set_field("mascot", "games", $games+$inc, ["user_id" => $USER->id]);
     }
 }
 ?>
