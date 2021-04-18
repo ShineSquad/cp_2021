@@ -105,10 +105,10 @@
 							<div class="item">
 								<div class="text">
 									<p>уровень сытости:</p>
-									<p class="satiety-persent">24%</p>
+									<p id="satiety-persent" value="100">100%</p>
 								</div>
 								<div class="progress-bar" id="progress-satiety">
-									<div class="value"></div>
+									<div class="value" value="100"></div>
 								</div>
 							</div>
 							<div class="item">

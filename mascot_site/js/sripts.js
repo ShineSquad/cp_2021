@@ -23,8 +23,20 @@ $(function() {
 });
 
 function satiety() {
-	let val = document.querySelector('#progress-satiety .value');
-		val.style.width = '100%';
+	let progress = document.querySelector('#progress-satiety .value'),
+		persent = document.querySelector('#satiety-persent'),
+		val_progress = progress.getAttribute('value'),
+		val_persent = persent.getAttribute('value');
+		persent.innerText = val_persent+'%';
+		progress.style.width = val_progress+'%';
+	setInterval(() => {
+		progress.setAttribute('value', val_persent-1);
+		persent.setAttribute('value', val_persent-1);
+		val_progress = progress.getAttribute('value');
+			val_persent = persent.getAttribute('value');
+		persent.innerText = val_persent+'%';
+		progress.style.width = val_progress+'%';
+	}, 5000) 
 }
 
 function change_avatar() {
