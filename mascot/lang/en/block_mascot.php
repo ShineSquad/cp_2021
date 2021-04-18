@@ -30,6 +30,7 @@
 // $string['newblock:addinstance'] = 'Add a newblock block';
 // $string['newblock:myaddinstance'] = 'Add a newblock block to my moodle';
 $string['pluginname'] = 'Mascot';
-$string['mascot'] = 'Simple HTML!!!!';
+$string['title'] = 'Mascot';
+$string['mascot'] = 'Mascot';
 $string['mascot:addinstance'] = 'Add a new simple mascot block';
 $string['mascot:myaddinstance'] = 'Add a new simple mascot block to the My Moodle page';

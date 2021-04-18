@@ -1,67 +1,100 @@
 <style type="text/css">
-    #inst24 .p-3 {
-        /*background-color: green;*/
-    }
-    .container {
+    #mas-container {
         width: 100%;
-        height: 100%;
-    }
-    header {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-        header .name-data {
-            display: flex;
-            flex-direction: row;
-        }
-            header .name-data .photo {
-                border-radius: 3px;
-            }
-            header .name-data .naming {
-                margin-left: 10px;
-                height: 35px;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-around;
-            }
-                header .name-data .naming .regalia {
-                    font-size: 11px;
-                    line-height: 13px;
-                    color: #575757;
-                }
-                header .name-data .naming .name {
-                    font-weight: bold;
-                    font-size: 14px;
-                    line-height: 16px;
-                    color: #0F6FC5;
-                }
-        header .coins {
-            font-size: 11px;
-            line-height: 13px;
-            color: #0F6FC5;
-            width: 35px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-    .satiety {
-        margin: 14px 0;
-        background: #EA8679;
-        width: 153px;
-        height: 18px;
         display: flex;
         align-items: center;
         justify-content: center;
     }
-        .satiety .text {
-            font-size: 12px;
-            line-height: 14px;
-            color: #FFFFFF;
+    #mascot {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 600px;
+        width: 320px;
+        position: relative;
+        background-image: url(https://shsq.ru/moodle/user-images/forest2.png);
+        background-size: 110% 110%;
+        background-position: 50% 50%;
+        overflow: hidden;
+    }
+    #mascot img {
+        width: 300px;
+    }
+    #mascot #mas-controls {
+        position: absolute;
+        bottom: 20px;
+        display: flex;
+        flex-direction: row;
+    }
+    #mascot #mas-controls .btn {
+        color: white;
+        padding: 10px;
+        margin: 0px 3px;
+        border-radius: 5px;
+        font-size: 12px;
+        cursor: pointer;
+        position: relative;
+    }
+        #mascot #mas-controls .btn.foods {background: #46B2CA;}
+        #mascot #mas-controls .btn.games {background: #EA8679;}
+        #mascot #mas-controls .btn.home {background: #47D780;}
+    #mascot #mas-controls .btn a {
+        color: white;
+        text-decoration: none;
+    }
+
+    #mascot #mas-popup {
+        position: absolute;
+        width: 140px;
+        height: 50px;
+        top: 150px;
+        left: 15px;
+        background: white;
+        border-radius: 3px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        transition: 1s;
+        cursor: pointer;
+        user-select: none;
+    }
+        #mascot #mas-popup:before {
+            content: "";
+            position: absolute;
+            top: 50px;
+            height: 0px;
+            width: 0px;
+            border: solid 10px;
+            border-color: white white transparent transparent;
+            right: 8px;
+        }
+
+    .bages:after {
+        content: attr(count);
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 100px;
+        background-color: red;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 10px;
+        top: -9px;
+        right: -4px;
+        z-index: 2;
+    }
+
+    .shake {
+        animation: shake .2s infinite linear reverse;
+    }
+        @keyframes shake{
+            from { transform: translateX(-1px); }
+            to { transform: translateX(1px); }
         }
 </style>
-
 <?php
 // This file is part of Moodle - http://moodle.org/
 //
@@ -90,11 +123,12 @@ defined('MOODLE_INTERNAL') || die();
 class block_mascot extends block_base {
 
     function init() {
-        $this->title = get_string('Mascot', 'block_mascot');
+        // $this->title = get_string('title', 'block_mascot');
+        $this->title = "Талисман";
     }
 
     function get_content() {
-        global $CFG, $OUTPUT;
+        global $CFG, $OUTPUT, $USER, $DB;
 
         if ($this->content !== null) {
             return $this->content;
@@ -102,27 +136,171 @@ class block_mascot extends block_base {
 
         $this->content = new stdClass;
 
-        $this->content->text = "
-            <div class='container'>
-                <header>
-                    <div class='name-data'>
-                        <img src='https://im0-tub-ru.yandex.net/i?id=77f707ef6ad3b7225da9ce6e8ca68388&n=13&exp=1' width='35' height='35' class='photo'>
-                        <div class='naming'>
-                            <p class='regalia'>Ваш адъютант</p>
-                            <p class='name'>Гриша</p>
+        $stats = $DB->get_record("mascot", ["user_id" => $USER->id]);
+
+        $foods = $stats->foods;
+        $games = $stats->games;
+
+        $DB->update_record("mascot", $dataobject, $bulk=false);
+
+        $this->content->text .= "
+            <div id='mas-container'>
+                <div id='mascot'>
+                    <div id='mas-popup' style='display: none; opacity: 0;' type='others'></div>
+                    <img src='https://shsq.ru/moodle/user-images/pers1.png'>
+                    <div id='mas-controls'>
+                        <div class='btn foods bages' count='$foods'>Покормить</div>
+                        <div class='btn games bages' count='$games'>Поиграть</div>
+                        <div class='btn home'>
+                            <a href='https://www.figma.com/proto/8QswJOUiCH6rmm0LzEIwYn/Untitled?node-id=41%3A2&scaling=min-zoom&page-id=0%3A1'
+                               target='_blank' >
+                                В комнату
+                            </a>
                         </div>
                     </div>
-                    <div class='coins'>
-                        <p class='count'>1087</p>
-                        <p class='text'>монет</p>
-                    </div>
-                </header>
-                <div class='satiety'>
-                    <p class='text'>Уровень сытости: <a id='satiety-value'>23%</a></p>
                 </div>
-            </div>";
-        $this->content->footer = 'this is the footer';
+            </div>
+        ";
 
         return $this->content;
     }
 }
+?>
+<script type="text/javascript">
+    const min_delay = 2000;
+    const max_delay = 3000;
+    const shake_duration = 300;
+    const messages = {
+        "games": [
+            "Мне скучно", 
+            "Поиграй со мной", 
+            "Время играть!", 
+            "Мячик?"
+        ],
+        "foods": [
+            "Хочу кушать", 
+            "Время перекусить", 
+            "Кууушать!!!!", 
+            "Пора кушать", 
+            "Я голоден"
+        ]
+    };
+    const sarcasm = [
+        "sarcasm",
+        "сарказм",
+        "@!#?@!",
+        "F"
+    ];
+
+    function _feed() {
+        // TODO:
+        // update data on databse
+        console.log("_feed");
+
+        var node = document.querySelector("#mas-controls .foods"),
+            count = parseInt(node.getAttribute("count"));
+
+        if (count == 0) {
+            node.classList.toggle("shake");
+            sadPP();
+            setTimeout(()=>{node.classList.toggle("shake")}, shake_duration);
+        } else {
+            hidePP();
+        }
+
+        node.setAttribute("count", (count-1 <= 0) ? 0 : count-1);
+    }
+    function _play() {
+        // TODO:
+        // update data on databse
+        console.log("_play");
+
+        var node = document.querySelector("#mas-controls .games"),
+            count = parseInt(node.getAttribute("count"));
+
+        if (count == 0) {
+            node.classList.toggle("shake");
+            sadPP();
+            setTimeout(()=>{node.classList.toggle("shake")}, shake_duration);
+        } else {
+            hidePP();
+        }
+
+        node.setAttribute("count", (count-1 <= 0) ? 0 : count-1);
+    }
+
+    function sadPP() {
+        setPPmsg(sarcasm[getRnd(0,sarcasm.length)])
+        setTimeout(hidePP, 1000);
+    }
+
+    function showPP(text="42", type="others") {
+        var popup = document.querySelector("#mas-popup");
+
+        popup.innerText = text;
+        popup.style.display = "flex";
+        popup.setAttribute("type", type);
+
+        setTimeout(()=>{ popup.style.opacity = 1; }, 10)
+    }
+
+    function hidePP() {
+        var popup = document.querySelector("#mas-popup");
+
+        popup.style.opacity = 0;
+
+        setTimeout(()=>{ popup.style.display = "none"; }, 500)
+    }
+
+    function getRnd(min, max) { return parseInt(Math.random()*max + min); }
+
+    function PPmsg() {
+        let key = Object.keys(messages)[getRnd(0,Object.keys(messages).length)];
+
+        return {
+            text: messages[key][getRnd(0,messages[key].length)],
+            type: key
+        }
+    }
+
+    function setPPmsg(text) {
+        var popup = document.querySelector("#mas-popup");
+        popup.innerText = text;
+    }
+
+    function PPtype() {
+        return document.querySelector("#mas-popup").getAttribute("type");
+    }
+
+    function newMsg() {
+        let msg = PPmsg();
+        setTimeout(showPP, getRnd(min_delay,max_delay), msg.text, msg.type);
+    }
+
+    function bindActions() {
+        let controls = document.querySelectorAll("#mas-controls .btn");
+        for (node of controls) {
+            node.addEventListener("click", (ev)=>{
+                let cl = event.target.classList;
+                if ( cl.contains(PPtype()) ) {
+                    if (PPtype() == "games") { _play(); }
+                    else { _feed() };
+
+                    newMsg(); // DEL
+                }
+            })
+        }
+
+        let popup = document.querySelector("#mas-popup");
+
+        popup.addEventListener("click", (ev)=>{
+            sadPP();
+            newMsg(); // DEL
+        })
+    }
+
+    window.addEventListener("load", (ev)=>{
+        bindActions();
+        newMsg(); // DEL
+    })
+</script>
