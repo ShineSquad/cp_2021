@@ -1,3 +1,4 @@
 pull_mascot.sh
 pull_rest.sh
-/mascot_site/node_modules
+pull_site.sh
+node_modules
