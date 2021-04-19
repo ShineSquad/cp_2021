@@ -1,12 +1,6 @@
 $(function() {
-	var food_items = ['drink', 'donuts', 'hamburger'];
-	for (i in food_items) {
-		var node = document.getElementById(food_items[i]),
-			count = node.getAttribute('count'),
-			children = $(node).children()[0];
-		$(children).text(count);
-	}
-
+	
+	food_update();
 	change_balance();
 	change_avatar();
 	satiety();
@@ -15,28 +9,51 @@ $(function() {
 		helper: "clone"
 	});
 	$('#avatar').droppable({
-		drop: function() {
-            alert('Вкусно');
-            console.log(this)
+		drop: function(event, ui) {
+			let current_id = ui.draggable.attr('id'),
+				current_item = document.getElementById(current_id),
+				count = current_item.getAttribute('count'),
+				food_value = current_item.getAttribute('food-value');
+			current_item.setAttribute('count', count-1);
+			food_update();
+
+			let prog_val = document.querySelector('#progress-satiety .value').getAttribute('value'),
+				prog_per = document.querySelector('#satiety-persent').getAttribute('value');
+
+			document.querySelector('#progress-satiety .value').style.width = parseInt(prog_val)+parseInt(food_value)+'%';
+			document.querySelector('#progress-satiety .value').setAttribute('value', parseInt(prog_val)+parseInt(food_value));
+
+			document.querySelector('#satiety-persent').innerText = parseInt(prog_per)+parseInt(food_value)+'%';
+			document.querySelector('#satiety-persent').setAttribute('value', parseInt(prog_val)+parseInt(food_value));
         }
 	});
 });
 
+function food_update() {
+	var food_items = ['drink', 'donuts', 'hamburger'];
+	for (i in food_items) {
+		var node = document.getElementById(food_items[i]),
+			count = node.getAttribute('count'),
+			children = $(node).children()[0];
+		$(children).text(count);
+	}
+}
+
 function satiety() {
-	let progress = document.querySelector('#progress-satiety .value'),
-		persent = document.querySelector('#satiety-persent'),
-		val_progress = progress.getAttribute('value'),
-		val_persent = persent.getAttribute('value');
-		persent.innerText = val_persent+'%';
-		progress.style.width = val_progress+'%';
 	setInterval(() => {
+		let progress = document.querySelector('#progress-satiety .value'),
+			persent = document.querySelector('#satiety-persent'),
+			val_progress = progress.getAttribute('value'),
+			val_persent = persent.getAttribute('value');
+			persent.innerText = val_persent+'%';
+			progress.style.width = val_progress+'%';
 		progress.setAttribute('value', val_persent-1);
 		persent.setAttribute('value', val_persent-1);
 		val_progress = progress.getAttribute('value');
 			val_persent = persent.getAttribute('value');
 		persent.innerText = val_persent+'%';
 		progress.style.width = val_progress+'%';
-	}, 5000) 
+	}, 5000)
 }
 
 function change_avatar() {
@@ -53,13 +70,14 @@ function change_balance() {
 	fetch("https://shsq.ru/mascot-rest/get_userinfo.php?id=2")
 		.then(resp => resp.text())
 		.then(text => {
-			localStorage.setItem('balance', JSON.parse(text).balance);
+			var bal = JSON.parse(text).balance;
+			localStorage.setItem('balance', bal);
+			let balance_array = ['main-balance', 'clothes-balance', 'food-balance'];
+			for (i in balance_array) {
+				document.getElementById(balance_array[i]).innerText = bal + ' монет';
+			}
 		});
-	let balance_array = ['main-balance', 'clothes-balance', 'food-balance'],
-		count = localStorage.getItem('balance');
-	for (i in balance_array) {
-		document.getElementById(balance_array[i]).innerText = count + ' монет';
-	}
+	
 }
 
 function buy( _type, _name, _value ) {
@@ -68,12 +86,15 @@ function buy( _type, _name, _value ) {
 		alert('Недостаточно баллов!');
 	} else {
 		if (_type == 'clothes') {
-			fetch('https://shsq.ru/mascot-rest/set_balance.php?id=2&inc=-'+ _value);
-			change_balance();
-			localStorage.setItem('active_avatar', './assets/' + _name);
-			change_avatar();
-			modal_food(' ' ,'none');
-			modal_view(' ' ,'none');
+			fetch('https://shsq.ru/mascot-rest/set_balance.php?id=2&inc=-'+ _value)
+				.then(resp => resp.text())
+				.then(text => {
+					change_balance();
+					localStorage.setItem('active_avatar', './assets/' + _name);
+					change_avatar();
+					modal_food(' ' ,'none');
+					modal_view(' ' ,'none');
+				})
 		}
 	}
 }
@@ -101,140 +122,3 @@ function modal_food( _item, _state ) {
 	}
 	$('#food-shop').css('display', _state);
 }
-
-const min_delay = 2000;
-const max_delay = 3000;
-const shake_duration = 300;
-const messages = {
-	"games": [
-    	"Мне скучно", 
-    	"Поиграй со мной", 
-    	"Время играть!", 
-    	"Мячик?"
-    ],
-    "foods": [
-    	"Хочу кушать", 
-    	"Время перекусить", 
-    	"Кууушать!!!!", 
-    	"Пора кушать", 
-    	"Я голоден"
-    ]
-};
-const sarcasm = [
-	"sarcasm",
-	"сарказм",
-	"@!#?@!",
-	"F"
-];
-
-function _feed() {
-	// TODO:
-	// update data on databse
-	console.log("_feed");
-
-	var node = document.querySelector("#mas-controls .foods"),
-		count = parseInt(node.getAttribute("count"));
-
-	if (count == 0) {
-		node.classList.toggle("shake");
-        sadPP();
-		setTimeout(()=>{node.classList.toggle("shake")}, shake_duration);
-	} else {
-        hidePP();
-    }
-
-	node.setAttribute("count", (count-1 <= 0) ? 0 : count-1);
-}
-function _play() {
-	// TODO:
-	// update data on databse
-	console.log("_play");
-
-	var node = document.querySelector("#mas-controls .games"),
-		count = parseInt(node.getAttribute("count"));
-
-	if (count == 0) {
-		node.classList.toggle("shake");
-        sadPP();
-		setTimeout(()=>{node.classList.toggle("shake")}, shake_duration);
-	} else {
-        hidePP();
-    }
-
-	node.setAttribute("count", (count-1 <= 0) ? 0 : count-1);
-}
-
-function sadPP() {
-    setPPmsg(sarcasm[getRnd(0,sarcasm.length)])
-    setTimeout(hidePP, 1000);
-}
-
-function showPP(text="42", type="others") {
-	var popup = document.querySelector("#mas-popup");
-
-	popup.innerText = text;
-	popup.style.display = "flex";
-	popup.setAttribute("type", type);
-
-	setTimeout(()=>{ popup.style.opacity = 1; }, 10)
-}
-
-function hidePP() {
-	var popup = document.querySelector("#mas-popup");
-
-	popup.style.opacity = 0;
-
-	setTimeout(()=>{ popup.style.display = "none"; }, 500)
-}
-
-function getRnd(min, max) { return parseInt(Math.random()*max + min); }
-
-function PPmsg() {
-	let key = Object.keys(messages)[getRnd(0,Object.keys(messages).length)];
-
-	return {
-		text: messages[key][getRnd(0,messages[key].length)],
-		type: key
-	}
-}
-
-function setPPmsg(text) {
-	var popup = document.querySelector("#mas-popup");
-	popup.innerText = text;
-}
-
-function PPtype() {
-	return document.querySelector("#mas-popup").getAttribute("type");
-}
-
-function newMsg() {
-	let msg = PPmsg();
-	setTimeout(showPP, getRnd(min_delay,max_delay), msg.text, msg.type);
-}
-
-function bindActions() {
-	let controls = document.querySelectorAll("#mas-controls .btn");
-	for (node of controls) {
-		node.addEventListener("click", (ev)=>{
-			let cl = event.target.classList;
-			if ( cl.contains(PPtype()) ) {
-				if (PPtype() == "games") { _play(); }
-				else { _feed() };
-
-				newMsg(); // DEL
-			}
-		})
-	}
-
-	let popup = document.querySelector("#mas-popup");
-
-	popup.addEventListener("click", (ev)=>{
-		sadPP();
-		newMsg(); // DEL
-	})
-}
-
-window.addEventListener("load", (ev)=>{
-	bindActions();
-	newMsg(); // DEL
-})

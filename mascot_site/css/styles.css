@@ -273,7 +273,7 @@ main {
           margin-bottom: 23px; }
           main .container .right .information .progress .item:first-child .value {
             background-color: #F85A44;
-            width: 24%; }
+            width: 100%; }
           main .container .right .information .progress .item:last-child .value {
             background-color: #7FBEC2;
             width: 50%; }

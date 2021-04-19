@@ -76,15 +76,15 @@
 						<div class="food-container">
 							<img src="assets/prompt.svg" width="248" height="72" class="prompt">
 							<div id="food">
-								<div id="drink" class="item drag_elem" count="5">
+								<div id="drink" class="item drag_elem" count="5" food-value="5">
 									<div id="drink_value" class="value"></div>
 									<img src="assets/drink.png">
 								</div>
-								<div id="donuts" class="item drag_elem" count="2">
+								<div id="donuts" class="item drag_elem" count="2" food-value="10">
 									<div id="donuts_value" class="value"></div>
 									<img src="assets/donuts.png">
 								</div>
-								<div id="hamburger" class="item drag_elem" count="8">
+								<div id="hamburger" class="item drag_elem" count="8" food-value="20">
 									<div id="hamburger_value" class="value"></div>
 									<img src="assets/hamburger.png">
 								</div>
